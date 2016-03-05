@@ -31,7 +31,7 @@ typedef struct __LAST_NAME_ENTRY{
 } lastNameEntry;
 
 lastNameEntry *findNameOptimal(char lastname[], lastNameEntry *pHead);
-lastNameEntry *appendOptimal(char lastName[], lastNameEntry *lne);
+lastNameEntry *appendOptimal(char lastName[], lastNameEntry *ape);
 
 
 #endif
