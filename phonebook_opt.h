@@ -23,4 +23,15 @@ typedef struct __PHONE_BOOK_ENTRY {
 entry *findName(char lastname[], entry *pHead);
 entry *append(char lastName[], entry *e);
 
+/* optimal 1 */
+typedef struct __LAST_NAME_ENTRY{
+    char lastName[MAX_LAST_NAME_SIZE];
+    entry *data;
+    struct __LAST_NAME_ENTRY *pNext;
+} lastNameEntry;
+
+lastNameEntry *findNameOptimal(char lastname[], lastNameEntry *pHead);
+lastNameEntry *appendOptimal(char lastName[], lastNameEntry *lne);
+
+
 #endif
