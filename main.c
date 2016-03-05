@@ -37,14 +37,14 @@ int main(int argc, char *argv[])
     }
 
     /* build the entry */
-    lastNameEntry *pHead, *ape;
-    pHead = (lastNameEntry *) malloc(sizeof(lastNameEntry));
-    printf("size of entry : %lu bytes\n", sizeof(lastNameEntry));
-    ape = pHead;
-    ape->pNext = NULL;
+    entry *pHead, *e;
+    pHead = (entry *) malloc(sizeof(entry));
+    printf("size of entry : %lu bytes\n", sizeof(entry));
+    e = pHead;
+    e->pNext = NULL;
 
 #if defined(__GNUC__)
-    __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(lastNameEntry));
+    __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
     clock_gettime(CLOCK_REALTIME, &start);
     while (fgets(line, sizeof(line), fp)) {
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
             i++;
         line[i - 1] = '\0';
         i = 0;
-        ape = append(line, ape);
+        e = append(line, e);
     }
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
@@ -60,22 +60,22 @@ int main(int argc, char *argv[])
     /* close file as soon as possible */
     fclose(fp);
 
-    ape = pHead;
+    e = pHead;
 
     /* the givn last name to find */
     char input[MAX_LAST_NAME_SIZE] = "zyxel";
-    ape = pHead;
+    e = pHead;
 
-    assert(findName(input, ape) &&
+    assert(findName(input, e) &&
            "Did you implement findName() in " IMPL "?");
     assert(0 == strcmp(findName(input, e)->lastName, "zyxel"));
 
 #if defined(__GNUC__)
-    __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(lastNameEntry));
+    __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
     /* compute the execution time */
     clock_gettime(CLOCK_REALTIME, &start);
-    findName(input, ape);
+    findName(input, e);
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time2 = diff_in_second(start, end);
 
