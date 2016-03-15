@@ -1,29 +1,51 @@
 #include <stdlib.h>
-
+#include <string.h>//strcasecmp function
+#include <stdio.h>//printf
+#include <ctype.h>
 #include "phonebook_opt.h"
-
-/* FILL YOUR OWN IMPLEMENTATION HERE! */
+ 
 entry *findName(char lastname[], entry *pHead)
 {
-    /* TODO: implement */
     while (pHead != NULL) {
-        if (strcasecmp(lastName, pHead->lastName) == 0){
-            printf(" %12s  is found!\n", lastName);
+        if (strcasecmp(lastname, pHead->lastName) == 0){
+            //printf(" %12s  is found!\n", lastName);
             return pHead;
         }
         pHead = pHead->pNext;
     }
-    printf(" %12s  is found!\n", lastName);
+    //printf(" %12s  is found!\n", lastName);why error?
     return NULL;
 }
 
-entry *append(char lastName[], entry *ape)
+entry *append(char lastName[], entry *e)
 {
     /* allocate memory for the new entry and put lastName */
-    ape->pNext = (lastNameEntry *) malloc(sizeof(lastNameEntry));
-    ape = ape->pNext;
-    strcpy(ape->lastName, lastName);
-    ape->pNext = NULL;
+    e->pNext = (entry *) malloc(sizeof(entry));
+    e = e->pNext;
+    strcpy(e->lastName, lastName);
+    e->pNext = NULL;
 
-    return ape;
+    return e;
 }
+
+// AP Hash Function  
+unsigned int APHash(char *str)  
+{  
+    unsigned int hash = 0;  
+    int i;  
+   
+    for (i=0; *str; i++)  
+    {  
+        if ((i & 1) == 0)  
+        {  
+            hash ^= ((hash << 7) ^ (*str++) ^ (hash >> 3));  
+        }  
+        else  
+        {  
+            hash ^= (~((hash << 11) ^ (*str++) ^ (hash >> 5)));  
+        }  
+    }  
+   
+    return (hash & 0x7FFFFFFF);  
+} 
+
