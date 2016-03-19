@@ -3,49 +3,67 @@
 #include <stdio.h>//printf
 #include <ctype.h>
 #include "phonebook_opt.h"
- 
+
+entry* HashHead[ 0x7FFFF];
+
 entry *findName(char lastname[], entry *pHead)
 {
-    while (pHead != NULL) {
-        if (strcasecmp(lastname, pHead->lastName) == 0){
-            //printf(" %12s  is found!\n", lastName);
-            return pHead;
+    entry* e = HashHead[key(lastname)];
+
+    while (e->pNext != NULL) {
+        if (strcasecmp(lastname, e->lastName) == 0) {
+            return e;
         }
-        pHead = pHead->pNext;
+        e = e->pNext;
     }
     //printf(" %12s  is found!\n", lastName);why error?
     return NULL;
 }
 
+/* allocate memory for the new entry and put lastName*/
 entry *append(char lastName[], entry *e)
 {
-    /* allocate memory for the new entry and put lastName */
-    e->pNext = (entry *) malloc(sizeof(entry));
-    e = e->pNext;
-    strcpy(e->lastName, lastName);
-    e->pNext = NULL;
+    e = (entry *) malloc(sizeof(entry)); //buffer
+    e->pNext=NULL;
+    strcpy(e->lastName, lastName); 
+    if(HashHead[key(lastName)] != NULL){
+	e->pNext = HashHead[key(lastName)];
+        HashHead[key(lastName)]=e;
+    }
+    else{
+        HashHead[key(lastName)]=e; 
+    }
 
     return e;
 }
 
-// AP Hash Function  
-unsigned int APHash(char *str)  
-{  
-    unsigned int hash = 0;  
-    int i;  
-   
-    for (i=0; *str; i++)  
-    {  
-        if ((i & 1) == 0)  
-        {  
-            hash ^= ((hash << 7) ^ (*str++) ^ (hash >> 3));  
-        }  
-        else  
-        {  
-            hash ^= (~((hash << 11) ^ (*str++) ^ (hash >> 5)));  
-        }  
-    }  
-   
-    return (hash & 0x7FFFFFFF);  
-} 
+// APHash
+unsigned int key(char *str)
+{
+    unsigned int hash = 0;
+    int i;
+
+    for (i=0; *str; i++) {
+        if ((i & 1) == 0) {
+            hash ^= ((hash << 7) ^ (*str++) ^ (hash >> 3));
+        } else {
+            hash ^= (~((hash << 11) ^ (*str++) ^ (hash >> 5)));
+        }
+    }
+
+    return (hash & 0x7FFFFFFF);
+}
+//hashvalue of the hash table
+//int Hashfunction(int key){
+  //  key = key % 42737;
+    //return key;
+//}
+
+
+
+
+
+
+
+
 

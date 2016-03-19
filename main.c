@@ -40,9 +40,13 @@ int main(int argc, char *argv[])
     entry *pHead, *e;
     pHead = (entry *) malloc(sizeof(entry));
     printf("size of entry : %lu bytes\n", sizeof(entry));
-    e = pHead;
+    e = pHead; 
     e->pNext = NULL;
-
+//#if defined(OPT) 
+    // build the head array of hash table
+    //entry* HashHead = malloc(42737 * sizeof(entry));
+    //no need 
+//#endif
 #if defined(__GNUC__)
     __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
 #endif
@@ -64,8 +68,7 @@ int main(int argc, char *argv[])
 
     /* the givn last name to find */
     char input[MAX_LAST_NAME_SIZE] = "zyxel";
-    e = pHead;
-
+    e = pHead; 
     assert(findName(input, e) &&
            "Did you implement findName() in " IMPL "?");
     assert(0 == strcmp(findName(input, e)->lastName, "zyxel"));
@@ -83,7 +86,7 @@ int main(int argc, char *argv[])
 #if defined(OPT)
     output = fopen("opt.txt", "a");
 #else
-    output = fopen("orig.txt", "a");
+    output = fopen("orig.txt", "a"); 
 #endif
     fprintf(output, "append() findName() %lf %lf\n", cpu_time1, cpu_time2);
     fclose(output);
@@ -93,6 +96,9 @@ int main(int argc, char *argv[])
 
     if (pHead->pNext) free(pHead->pNext);
     free(pHead);
-
+/*#if defined(OPT)
+    if (e->pNext) free(e->pNext); 
+    free(e);
+#endif*/
     return 0;
 }
