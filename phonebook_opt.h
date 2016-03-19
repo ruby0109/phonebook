@@ -2,7 +2,7 @@
 #define _PHONEBOOK_H
 
 #define MAX_LAST_NAME_SIZE 16
-#define HASH_SIZE 0x7FF
+#define HASH_SIZE 7121
 
 //original struct with details
 #define OPT 1

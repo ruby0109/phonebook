@@ -7,10 +7,10 @@
 entry *HashHead[HASH_SIZE], *Hashe[HASH_SIZE];//Hash record the positionof the linked list
 
 entry *findName(char lastname[], entry *pHead)
-{  
+{
     int i;
     i = HashFunction(lastname);
-    
+
     while (HashHead[i] != NULL) {
         if (strcasecmp(lastname, HashHead[i]->lastName) == 0) {
             return HashHead[i];
@@ -28,20 +28,19 @@ entry *append(char lastName[], entry *e)
     int i;
     i = HashFunction(lastName);
     strcpy(e->lastName, lastName);
- 
-    if(HashHead[i] == NULL){
-	HashHead[i] = e;
+
+    if(HashHead[i] == NULL) {
+        HashHead[i] = e;
         Hashe[i]=HashHead[i];
-        Hashe[i]->pNext=NULL; 
-    }
-    else{
-	Hashe[i]->pNext = e;
+        Hashe[i]->pNext=NULL;
+    } else {
+        Hashe[i]->pNext = e;
         Hashe[i]=Hashe[i]->pNext;
         Hashe[i]->pNext=NULL;
     }
     return e;
 }
-
+/*
 // APHash
 unsigned int HashFunction(char *str)
 {
@@ -57,7 +56,19 @@ unsigned int HashFunction(char *str)
     }
     return (hash & HASH_SIZE);
 }
+*/
+// BKDR Hash Function
+unsigned int HashFunction(char *str)
+{
+    unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
+    unsigned int hash = 0;
 
+    while (*str) {
+        hash = hash * seed + (*str++);
+    }
+
+    return (hash & HASH_SIZE);
+}
 
 
 
