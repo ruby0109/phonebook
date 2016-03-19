@@ -4,17 +4,18 @@
 #include <ctype.h>
 #include "phonebook_opt.h"
 
-entry* HashHead[ 0x7FFFF];
+entry *HashHead[HASH_SIZE], *Hashe[HASH_SIZE];//Hash record the positionof the linked list
 
 entry *findName(char lastname[], entry *pHead)
-{
-    entry* e = HashHead[key(lastname)];
-
-    while (e->pNext != NULL) {
-        if (strcasecmp(lastname, e->lastName) == 0) {
-            return e;
+{  
+    int i;
+    i = HashFunction(lastname);
+    
+    while (HashHead[i] != NULL) {
+        if (strcasecmp(lastname, HashHead[i]->lastName) == 0) {
+            return HashHead[i];
         }
-        e = e->pNext;
+        HashHead[i] = HashHead[i]->pNext;
     }
     //printf(" %12s  is found!\n", lastName);why error?
     return NULL;
@@ -24,21 +25,25 @@ entry *findName(char lastname[], entry *pHead)
 entry *append(char lastName[], entry *e)
 {
     e = (entry *) malloc(sizeof(entry)); //buffer
-    e->pNext=NULL;
-    strcpy(e->lastName, lastName); 
-    if(HashHead[key(lastName)] != NULL){
-	e->pNext = HashHead[key(lastName)];
-        HashHead[key(lastName)]=e;
+    int i;
+    i = HashFunction(lastName);
+    strcpy(e->lastName, lastName);
+ 
+    if(HashHead[i] == NULL){
+	HashHead[i] = e;
+        Hashe[i]=HashHead[i];
+        Hashe[i]->pNext=NULL; 
     }
     else{
-        HashHead[key(lastName)]=e; 
+	Hashe[i]->pNext = e;
+        Hashe[i]=Hashe[i]->pNext;
+        Hashe[i]->pNext=NULL;
     }
-
     return e;
 }
 
 // APHash
-unsigned int key(char *str)
+unsigned int HashFunction(char *str)
 {
     unsigned int hash = 0;
     int i;
@@ -50,14 +55,8 @@ unsigned int key(char *str)
             hash ^= (~((hash << 11) ^ (*str++) ^ (hash >> 5)));
         }
     }
-
-    return (hash & 0x7FFFFFFF);
+    return (hash & HASH_SIZE);
 }
-//hashvalue of the hash table
-//int Hashfunction(int key){
-  //  key = key % 42737;
-    //return key;
-//}
 
 
 

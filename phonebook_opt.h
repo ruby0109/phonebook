@@ -2,7 +2,7 @@
 #define _PHONEBOOK_H
 
 #define MAX_LAST_NAME_SIZE 16
-//#define HASH_TABLE_SIZE 42737
+#define HASH_SIZE 0x7FF
 
 //original struct with details
 #define OPT 1
@@ -35,11 +35,9 @@ entry *findName(char lastname[], entry *pHead);
 entry *append(char lastName[], entry *e);
 
 /*Optimal 2*/
-//entry* HashHead[ 0x7FFFF];//when entry* >> itself
-//APHash change the charater to int
-unsigned int key(char *str);
-//hashfunction
-int Hashfunction(int key);
+//Hashfunction: APHash change the charater to int
+unsigned int HashFunction(char *str);
+
 
 
 #endif
