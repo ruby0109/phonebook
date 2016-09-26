@@ -2,7 +2,7 @@
 #include <string.h>//strcasecmp function
 #include <stdio.h>//printf
 #include <ctype.h>
-#include "phonebook_hash.h"
+#include "phonebook_memory.h"
 
 entry *HashHead[HASH_SIZE], *Hashe[HASH_SIZE];//Hash record the positionof the linked list
 
@@ -17,14 +17,13 @@ entry *findName(char lastname[], entry *pHead)
         }
         HashHead[i] = HashHead[i]->pNext;
     }
-    //printf(" %12s  is found!\n", lastName);why error?
     return NULL;
 }
 
 /* allocate memory for the new entry and put lastName*/
 entry *append(char lastName[], entry *e)
 {
-    e = (entry *) malloc(sizeof(entry)); //buffer
+    e = palloc(e);
     int i;
     i = HashFunction(lastName);
     strcpy(e->lastName, lastName);
@@ -40,8 +39,7 @@ entry *append(char lastName[], entry *e)
     }
     return e;
 }
-/*
-// APHash
+/* APHash
 unsigned int HashFunction(char *str)
 {
     unsigned int hash = 0;
@@ -57,8 +55,7 @@ unsigned int HashFunction(char *str)
     return (hash & HASH_SIZE);
 }
 */
-/*
-// BKDR Hash Function
+/* BKDR Hash Function
 unsigned int HashFunction(char *str)
 {
     unsigned int seed = 131; // 31 131 1313 13131 131313 etc..
@@ -72,7 +69,7 @@ unsigned int HashFunction(char *str)
 }
 */
 
-//djb2 Hash Function
+/* djb2 Hash Function */
 unsigned int HashFunction(char *str)
 {
     unsigned int hash = 5381;
@@ -84,6 +81,34 @@ unsigned int HashFunction(char *str)
     return (hash & HASH_SIZE);
 }
 
+/*  Optimal 3*/
+/*  memory pool*/
+/*
+ *  This code now only can alloc memory for last name structure(entry)
+ *  and use another integer to record the remain memory of pool.
+ *
+*/
+/*  First use malloc to alloc a pool of memory( size+sizeof POOL),
+    p->next is the first node in POOL */
+entry *pool_create( size_t size )
+{
+
+    entry *p = (entry*)malloc((size*sizeof(entry)));
+    return p;
+}
+/*  return the memory space at once */
+void pool_destroy( entry *p)
+{
+    free(p);
+}
+
+/*  each time alloc a entry size memory */
+entry *palloc (entry *p)
+{
+
+    return (++p);
+
+}
 
 
 

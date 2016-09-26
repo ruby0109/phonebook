@@ -4,7 +4,6 @@
 #define MAX_LAST_NAME_SIZE 16
 #define HASH_SIZE 42737
 
-
 typedef struct __PHONE_BOOK_DETAIL {
     //char lastName[MAX_LAST_NAME_SIZE];
     char firstName[16];
@@ -23,22 +22,29 @@ typedef struct __PHONE_BOOK_DETAIL {
 detail *findNameDetail(char lastname[], detail *pHead);
 detail *appendDetail(char lastName[], detail *e);
 
-/*Optimal 1*/
-//shrink the struct to lastname
-typedef struct __LAST_NAME__ENTRY {
+/*Optimal 3*/
+/* Memory Pool*/
+typedef struct __POOL {
     char lastName[MAX_LAST_NAME_SIZE];
     detail *data;//data pointer to detail struct
-    struct __LAST_NAME__ENTRY *pNext;// the address of next point value
+    struct __POOL *pNext;// the address of next point
 } entry;
 
 entry *findName(char lastname[], entry *pHead);
 entry *append(char lastName[], entry *e);
 
 /*Optimal 2*/
+/* Hash Table*/
 unsigned int HashFunction(char *str);
 
 
+/*  First use malloc to alloc a pool of memory( size+sizeof POOL),
+    p->next is the first node in POOL */
+entry *pool_create( size_t size );
+void pool_destroy( entry *p);
+entry *palloc (entry *p);
 
 #endif
+
 
 
