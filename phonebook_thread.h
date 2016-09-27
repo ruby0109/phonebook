@@ -3,7 +3,8 @@
 
 #define MAX_LAST_NAME_SIZE 16
 #define HASH_SIZE 42737
-
+#define POOL_SIZE 400000
+#define NUM_THREADS 8
 
 typedef struct __PHONE_BOOK_DETAIL {
     //char lastName[MAX_LAST_NAME_SIZE];
@@ -19,33 +20,43 @@ typedef struct __PHONE_BOOK_DETAIL {
     struct __PHONE_BOOK_DETAIL*dNext;
 } detail;
 
-
 detail *findNameDetail(char lastname[], detail *pHead);
 detail *appendDetail(char lastName[], detail *e);
 
-/*Optimal 1*/
-//shrink the struct to lastname
-typedef struct __LAST_NAME__ENTRY {
+/*Optimal 3*/
+/* Memory Pool*/
+typedef struct __POOL {
     char lastName[MAX_LAST_NAME_SIZE];
     detail *data;//data pointer to detail struct
-    struct __LAST_NAME__ENTRY *pNext;// the address of next point value
+    struct __POOL *pNext;// the address of next point 
 } entry;
 
 entry *findName(char lastname[]);
-void append(char lastName[]);
+int append(char lastName[]);
 
-/*Optimal 2*/
+/* Hash Table*/
 unsigned int HashFunction(char *str);
 
-/* record the tail of each buckets*/                                           
-typedef struct __HASH_TABLE {                                                  
-    entry **tail;                                                              
+/* record the tail of each buckets*/
+typedef struct __HASH_TABLE {
+    entry **tail;
 }HashTable;
 
-HashTable *hash_ptr;                                                                              
+HashTable *hash_ptr;                                                             
+/* Initial hash table and memory pool*/
+void Initial(void);
+/*  return the memory space at once */
+void pool_destroy( entry *p);
+/*  each time alloc a entry size memory */
+entry *palloc (void);
+/* record the address in memory pool*/
+entry *record,*end;
 
-void Initial_HashTable(void);  
+/* Optimal 4*/
+/* threads */
+void Append(void* fp);
 
 #endif
+
 
 

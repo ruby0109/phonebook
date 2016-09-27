@@ -1,44 +1,35 @@
 #include <stdlib.h>
 #include <string.h>//strcasecmp function
-#include <stdio.h>//printf
+#include <stdio.h>
 #include <ctype.h>
 #include "phonebook_hash.h"
 
-entry *HashHead[HASH_SIZE], *Hashe[HASH_SIZE];//Hash record the positionof the linked list
-
-entry *findName(char lastname[], entry *pHead)
+entry *findName(char lastname[])
 {
-    int i;
-    i = HashFunction(lastname);
+    entry* list;
+    int value;
+    value = HashFunction(lastname);
 
-    while (HashHead[i] != NULL) {
-        if (strcasecmp(lastname, HashHead[i]->lastName) == 0) {
-            return HashHead[i];
+    for (list=hash_ptr->tail[value];list->pNext != NULL ; list=list->pNext) {
+        if (strcasecmp(lastname, list->lastName) == 0) {
+            return list;
         }
-        HashHead[i] = HashHead[i]->pNext;
     }
-    //printf(" %12s  is found!\n", lastName);why error?
     return NULL;
 }
 
 /* allocate memory for the new entry and put lastName*/
-entry *append(char lastName[], entry *e)
+void append(char lastName[])
 {
-    e = (entry *) malloc(sizeof(entry)); //buffer
-    int i;
-    i = HashFunction(lastName);
+    entry *e;
+    e = (entry *) malloc(sizeof(entry)); 
+    int value;
+    value = HashFunction(lastName);
     strcpy(e->lastName, lastName);
 
-    if(HashHead[i] == NULL) {
-        HashHead[i] = e;
-        Hashe[i]=HashHead[i];
-        Hashe[i]->pNext=NULL;
-    } else {
-        Hashe[i]->pNext = e;
-        Hashe[i]=Hashe[i]->pNext;
-        Hashe[i]->pNext=NULL;
-    }
-    return e;
+    e->pNext=hash_ptr->tail[value];
+    hash_ptr->tail[value]=e;
+    
 }
 /*
 // APHash
@@ -78,11 +69,39 @@ unsigned int HashFunction(char *str)
     unsigned int hash = 5381;
     int c;
 
-    while (c = *str++)
+    while((c = *str++)){
         hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-
+    }
     return (hash & HASH_SIZE);
 }
+
+/* allocate space for the Hash Table structure*/
+void Initial_HashTable(void){
+
+    hash_ptr = (HashTable* )malloc(sizeof(HashTable));
+    hash_ptr->tail = malloc(HASH_SIZE*sizeof(entry*));
+    int i;
+    for(i=0;i<HASH_SIZE;i++){
+        hash_ptr->tail[i]=NULL;
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
