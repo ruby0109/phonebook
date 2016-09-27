@@ -2,10 +2,8 @@
 #define _PHONEBOOK_H
 
 #define MAX_LAST_NAME_SIZE 16
-#define HASH_SIZE 7121
 
-//original struct with details
-#define OPT 1
+
 typedef struct __PHONE_BOOK_DETAIL {
     //char lastName[MAX_LAST_NAME_SIZE];
     char firstName[16];
@@ -20,6 +18,7 @@ typedef struct __PHONE_BOOK_DETAIL {
     struct __PHONE_BOOK_DETAIL*dNext;
 } detail;
 
+
 detail *findNameDetail(char lastname[], detail *pHead);
 detail *appendDetail(char lastName[], detail *e);
 
@@ -28,17 +27,11 @@ detail *appendDetail(char lastName[], detail *e);
 typedef struct __LAST_NAME__ENTRY {
     char lastName[MAX_LAST_NAME_SIZE];
     detail *data;//data pointer to detail struct
-    struct __LAST_NAME_ENTRY *pNext;// the address of next point value
+    struct __LAST_NAME__ENTRY *pNext;// the address of next point value
 } entry;
 
 entry *findName(char lastname[], entry *pHead);
 entry *append(char lastName[], entry *e);
-
-/*Optimal 2*/
-//Hashfunction: APHash change the charater to int
-unsigned int HashFunction(char *str);
-
-
 
 #endif
 

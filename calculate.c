@@ -87,6 +87,7 @@ int main(void)
         mem_sum_a += mem_a;
         mem_sum_f += mem_f;
     }
+<<<<<<< HEAD
     fclose(fp);
 
     /*threads*/
@@ -111,6 +112,10 @@ int main(void)
     }
     fprintf(output, "append() %lf %lf %lf %f %f\n",orig_sum_a / 100.0, opt_sum_a / 100.0, hash_sum_a / 100.0, mem_sum_a / 100.0, th_sum_a / 100.0);
     fprintf(output, "findName() %lf %lf %lf %f %f", orig_sum_f / 100.0, opt_sum_f / 100.0, hash_sum_f / 100.0, mem_sum_f / 100.0, th_sum_f / 100.0);
+=======
+    fprintf(output, "append() %lf %lf %lf %f\n",orig_sum_a / 100.0, opt_sum_a / 100.0, hash_sum_a / 100.0, mem_sum_a / 100.0);
+    fprintf(output, "findName() %lf %lf %lf %f", orig_sum_f / 100.0, opt_sum_f / 100.0, hash_sum_f / 100.0, mem_sum_f / 100.0);
+>>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
     fclose(output);
     fclose(fp);
     return 0;

@@ -13,5 +13,8 @@ plot [:][:0.100]'output.txt' using 2:xtic(1) with histogram title 'original', \
 '' using ($0+0.35):($4+0.002):4 with labels title ' ', \
 '' using 5:xtic(1) with histogram title 'memory' , \
 '' using ($0+0.65):($5+0.0025):5 with labels title ' ', \
+<<<<<<< HEAD
 '' using 6:xtic(1) with histogram title 'thread' , \
 '' using ($0+0.7):($6+0.003):6 with labels title ' ', \
+=======
+>>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab

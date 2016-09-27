@@ -7,6 +7,7 @@
 
 #include IMPL
 
+#define POOL_SIZE 400000
 #define DICT_FILE "./dictionary/words.txt"
 
 static double diff_in_second(struct timespec t1, struct timespec t2)
@@ -29,6 +30,14 @@ int main(int argc, char *argv[])
     char line[MAX_LAST_NAME_SIZE];
     struct timespec start, end;
     double cpu_time1, cpu_time2;
+    /* record the size of pool*/
+    int space = POOL_SIZE;
+    printf("\n origin space %d\n",space);
+
+    /* the analysis of hash function's distribution*/
+#if defined(SLOT)
+    int hash_slot[HASH_SIZE]= {0};
+#endif
 
     /* check file opening */
     fp = fopen(DICT_FILE, "r");
@@ -54,10 +63,25 @@ int main(int argc, char *argv[])
 #else    
     /* build the entry */
     entry *pHead, *e;
+<<<<<<< HEAD
     printf("size of entry : %lu bytes\n", sizeof(entry));
     pHead = (entry *) malloc(sizeof(entry));
     e = pHead;
     e->pNext = NULL;
+=======
+#if defined(POOL)
+    /* create a memory pool */
+    pHead = pool_create(POOL_SIZE);
+    space--;
+#else
+    pHead = (entry *) malloc(sizeof(entry));
+#endif
+    printf("size of entry : %lu bytes\n", sizeof(entry));
+    e = pHead;
+    e->pNext = NULL;
+#if defined(__GNUC__)
+    __builtin___clear_cache((char *) pHead, (char *) pHead + sizeof(entry));
+>>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
 #endif
 
 
@@ -132,9 +156,21 @@ int main(int argc, char *argv[])
             i++;
         line[i - 1] = '\0';
         i = 0;
-        e = append(line, e);
-    }
+#if defined(SLOT)
+        hash_slot[HashFunction(line)]++;
 #endif
+#if defined(POOL)
+        if(space > sizeof(entry)) e = append(line,e);
+        space--;
+#else
+        e = append(line, e);
+#endif
+    }
+<<<<<<< HEAD
+#endif
+=======
+    printf("\n space %d \n",space);
+>>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time1 = diff_in_second(start, end);
 
@@ -197,7 +233,18 @@ int main(int argc, char *argv[])
     clock_gettime(CLOCK_REALTIME, &end);
     cpu_time2 = diff_in_second(start, end);
 
+<<<<<<< HEAD
 #endif    
+=======
+#if defined(SLOT)
+    FILE *output2;
+    output2 = fopen("slot.txt","a");
+    for( i=0; i<HASH_SIZE; i++) {
+        fprintf(output2, "%d %d\n",i,hash_slot[i]);
+    }
+    fclose(output2);
+#endif
+>>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
 
     FILE *output;
 #if defined(OPT)
@@ -206,8 +253,11 @@ int main(int argc, char *argv[])
     output = fopen("hash.txt", "a");
 #elif defined(POOL)
     output = fopen("memory.txt","a");
+<<<<<<< HEAD
 #elif defined(THREAD)
     output = fopen("thread.txt","a");
+=======
+>>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
 #else
     output = fopen("orig.txt", "a");
 #endif
@@ -217,11 +267,16 @@ int main(int argc, char *argv[])
 
     printf("execution time of append() : %lf sec\n", cpu_time1);
     printf("execution time of findName() : %lf sec\n", cpu_time2);
+<<<<<<< HEAD
 #if defined(POOL) || defined(HASH) 
     return 0;
 #elif  defined(THREAD)
     pthread_exit(NULL);
     return 0;
+=======
+#if defined(POOL)
+    pool_destroy(pHead);
+>>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
 #else
     if (pHead->pNext) free(pHead->pNext);
     free(pHead);
