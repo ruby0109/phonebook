@@ -3,10 +3,7 @@
 
 #define MAX_LAST_NAME_SIZE 16
 #define HASH_SIZE 42737
-<<<<<<< HEAD
 #define POOL_SIZE 400000
-=======
->>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
 
 typedef struct __PHONE_BOOK_DETAIL {
     //char lastName[MAX_LAST_NAME_SIZE];
@@ -22,10 +19,6 @@ typedef struct __PHONE_BOOK_DETAIL {
     struct __PHONE_BOOK_DETAIL*dNext;
 } detail;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
 detail *findNameDetail(char lastname[], detail *pHead);
 detail *appendDetail(char lastName[], detail *e);
 
@@ -34,7 +27,6 @@ detail *appendDetail(char lastName[], detail *e);
 typedef struct __POOL {
     char lastName[MAX_LAST_NAME_SIZE];
     detail *data;//data pointer to detail struct
-<<<<<<< HEAD
     struct __POOL *pNext;// the address of next point 
 } entry;
 
@@ -58,24 +50,7 @@ void pool_destroy( entry *p);
 entry *palloc (void);
 /* record the address in memory pool*/
 entry *record,*end;
-=======
-    struct __POOL *pNext;// the address of next point
-} entry;
 
-entry *findName(char lastname[], entry *pHead);
-entry *append(char lastName[], entry *e);
-
-/*Optimal 2*/
-/* Hash Table*/
-unsigned int HashFunction(char *str);
-
-
-/*  First use malloc to alloc a pool of memory( size+sizeof POOL),
-    p->next is the first node in POOL */
-entry *pool_create( size_t size );
-void pool_destroy( entry *p);
-entry *palloc (entry *p);
->>>>>>> 2f7ccdb7bde3ee4ba27d7158fa471375fe8e7dab
 
 #endif
 
