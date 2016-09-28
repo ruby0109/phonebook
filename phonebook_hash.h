@@ -31,20 +31,20 @@ typedef struct __LAST_NAME__ENTRY {
     struct __LAST_NAME__ENTRY *pNext;// the address of next point value
 } entry;
 
-entry *findName(char lastname[]);
-void append(char lastName[]);
-
 /*Optimal 2*/
 unsigned int HashFunction(char *str);
 
-/* record the tail of each buckets*/                                           
-typedef struct __HASH_TABLE {                                                  
-    entry **tail;                                                              
-}HashTable;
+/* record the tail of each buckets*/
+typedef struct __HASH_TABLE {
+    entry **tail;
+} HashTable;
 
-HashTable *hash_ptr;                                                                              
+HashTable *hash_ptr;
+HashTable* Initial_HashTable(void);
 
-void Initial_HashTable(void);  
+entry *findName(char lastname[], HashTable *hash_ptr);
+void append(char lastName[], HashTable *hash_ptr);
+
 
 #endif
 

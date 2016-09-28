@@ -27,23 +27,24 @@ detail *appendDetail(char lastName[], detail *e);
 typedef struct __POOL {
     char lastName[MAX_LAST_NAME_SIZE];
     detail *data;//data pointer to detail struct
-    struct __POOL *pNext;// the address of next point 
+    struct __POOL *pNext;// the address of next point
 } entry;
-
-entry *findName(char lastname[]);
-int append(char lastName[]);
-
-/* Hash Table*/
-unsigned int HashFunction(char *str);
 
 /* record the tail of each buckets*/
 typedef struct __HASH_TABLE {
     entry **tail;
-}HashTable;
+} HashTable;
 
-HashTable *hash_ptr;                                                             
+HashTable *hash_ptr;
+
+/* Hash Table*/
+unsigned int HashFunction(char *str);
+
+entry *findName(char lastname[], HashTable *hash_ptr);
+int append(char lastName[], HashTable *hash_ptr);
+
 /* Initial hash table and memory pool*/
-void Initial(void);
+HashTable *Initial(void);
 /*  return the memory space at once */
 void pool_destroy( entry *p);
 /*  each time alloc a entry size memory */

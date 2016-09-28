@@ -89,7 +89,29 @@ int main(void)
     }
     fclose(fp);
 
-    /*threads*/
+    /*mmap*/
+    fp = fopen("mmap.txt", "r");
+    if (!fp) {
+        fp = fopen("orig.txt", "r");
+        if (!fp) {
+            printf("ERROR opening input file opt.txt\n");
+            exit(0);
+        }
+    }
+    double mmap_sum_a = 0.0, mmap_sum_f = 0.0, mmap_a, mmap_f;
+    for (i = 0; i < 100; i++) {
+        if (feof(fp)) {
+            printf("ERROR: You need 100 datum instead of %d\n", i);
+            printf("run 'make run' longer to get enough information\n\n");
+            exit(0);
+        }
+        fscanf(fp, "%s %s %lf %lf\n", append, find,&mmap_a, &mmap_f);
+        mmap_sum_a += mmap_a;
+        mmap_sum_f += mmap_f;
+    }
+    fclose(fp);
+
+    /*thread*/
     fp = fopen("thread.txt", "r");
     if (!fp) {
         fp = fopen("orig.txt", "r");
@@ -98,19 +120,20 @@ int main(void)
             exit(0);
         }
     }
-    double th_sum_a = 0.0, th_sum_f = 0.0, th_a, th_f;
+    double thr_sum_a = 0.0, thr_sum_f = 0.0, thr_a, thr_f;
     for (i = 0; i < 100; i++) {
         if (feof(fp)) {
             printf("ERROR: You need 100 datum instead of %d\n", i);
             printf("run 'make run' longer to get enough information\n\n");
             exit(0);
         }
-        fscanf(fp, "%s %s %lf %lf\n", append, find,&th_a, &th_f);
-        th_sum_a += th_a;
-        th_sum_f += th_f;
+        fscanf(fp, "%s %s %lf %lf\n", append, find,&thr_a, &thr_f);
+        thr_sum_a += thr_a;
+        thr_sum_f += thr_f;
     }
-    fprintf(output, "append() %lf %lf %lf %f %f\n",orig_sum_a / 100.0, opt_sum_a / 100.0, hash_sum_a / 100.0, mem_sum_a / 100.0, th_sum_a / 100.0);
-    fprintf(output, "findName() %lf %lf %lf %f %f", orig_sum_f / 100.0, opt_sum_f / 100.0, hash_sum_f / 100.0, mem_sum_f / 100.0, th_sum_f / 100.0);
+
+    fprintf(output, "append() %lf %lf %lf %f %f %f\n",orig_sum_a / 100.0, opt_sum_a / 100.0, hash_sum_a / 100.0, mem_sum_a / 100.0, mmap_sum_a / 100.0,  thr_sum_a / 100.0);
+    fprintf(output, "findName() %lf %lf %lf %f %f %f", orig_sum_f / 100.0, opt_sum_f / 100.0, hash_sum_f / 100.0, mem_sum_f / 100.0, mmap_sum_f / 100.0,  thr_sum_f / 100.0);
     fclose(output);
     fclose(fp);
     return 0;

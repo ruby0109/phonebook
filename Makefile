@@ -4,7 +4,6 @@ CFLAGS_orig = -O0
 CFLAGS_opt  = -O0
 CFLAGS_hash = -O0
 CFLAGS_memory = -O0
-CFLAGS_thread = -O0
 
 EXEC = phonebook_orig phonebook_opt phonebook_hash phonebook_memory phonebook_thread
 all: $(EXEC)
@@ -35,9 +34,9 @@ phonebook_memory: $(SRCS_common) phonebook_memory.c phonebook_memory.h
 		$(SRCS_common) $@.c
 
 phonebook_thread: $(SRCS_common) phonebook_thread.c phonebook_thread.h
-	$(CC) $(CFLAGS_common) $(CFLAGS_thread) \
+	$(CC) $(CFLAGS_common) $(CFLAGS_memory) \
 		-DIMPL="\"$@.h\"" -o $@ \
-		-DTHREAD="1"\
+		-DTHRD="1"\
 		-pthread\
 		$(SRCS_common) $@.c
 

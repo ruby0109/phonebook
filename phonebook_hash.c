@@ -4,13 +4,13 @@
 #include <ctype.h>
 #include "phonebook_hash.h"
 
-entry *findName(char lastname[])
+entry *findName(char lastname[], HashTable *hash_ptr)
 {
     entry* list;
     int value;
     value = HashFunction(lastname);
 
-    for (list=hash_ptr->tail[value];list->pNext != NULL ; list=list->pNext) {
+    for (list=hash_ptr->tail[value]; list->pNext != NULL ; list=list->pNext) {
         if (strcasecmp(lastname, list->lastName) == 0) {
             return list;
         }
@@ -19,17 +19,17 @@ entry *findName(char lastname[])
 }
 
 /* allocate memory for the new entry and put lastName*/
-void append(char lastName[])
+void append(char lastName[], HashTable *hash_ptr)
 {
     entry *e;
-    e = (entry *) malloc(sizeof(entry)); 
+    e = (entry *) malloc(sizeof(entry));
     int value;
     value = HashFunction(lastName);
     strcpy(e->lastName, lastName);
 
     e->pNext=hash_ptr->tail[value];
     hash_ptr->tail[value]=e;
-    
+
 }
 /*
 // APHash
@@ -76,15 +76,17 @@ unsigned int HashFunction(char *str)
 }
 
 /* allocate space for the Hash Table structure*/
-void Initial_HashTable(void){
+HashTable *Initial_HashTable(void)
+{
 
     hash_ptr = (HashTable* )malloc(sizeof(HashTable));
     hash_ptr->tail = malloc(HASH_SIZE*sizeof(entry*));
     int i;
-    for(i=0;i<HASH_SIZE;i++){
+    for(i=0; i<HASH_SIZE; i++) {
         hash_ptr->tail[i]=NULL;
     }
-    
+    return hash_ptr;
+
 }
 
 

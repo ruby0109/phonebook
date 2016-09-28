@@ -4,7 +4,7 @@
 #define MAX_LAST_NAME_SIZE 16
 #define HASH_SIZE 42737
 #define POOL_SIZE 400000
-#define NUM_THREADS 8
+#define NUMTHRDS 2
 
 typedef struct __PHONE_BOOK_DETAIL {
     //char lastName[MAX_LAST_NAME_SIZE];
@@ -23,28 +23,28 @@ typedef struct __PHONE_BOOK_DETAIL {
 detail *findNameDetail(char lastname[], detail *pHead);
 detail *appendDetail(char lastName[], detail *e);
 
-/*Optimal 3*/
 /* Memory Pool*/
 typedef struct __POOL {
     char lastName[MAX_LAST_NAME_SIZE];
     detail *data;//data pointer to detail struct
-    struct __POOL *pNext;// the address of next point 
+    struct __POOL *pNext;// the address of next point
 } entry;
-
-entry *findName(char lastname[]);
-int append(char lastName[]);
-
-/* Hash Table*/
-unsigned int HashFunction(char *str);
 
 /* record the tail of each buckets*/
 typedef struct __HASH_TABLE {
     entry **tail;
-}HashTable;
+} HashTable;
 
-HashTable *hash_ptr;                                                             
+HashTable *hash_ptr;
+
+/* Hash Table*/
+unsigned int HashFunction(char *str);
+
+entry *findName(char lastname[], HashTable *hash_ptr);
+int append(char lastName[], HashTable *hash_ptr);
+
 /* Initial hash table and memory pool*/
-void Initial(void);
+HashTable *Initial(void);
 /*  return the memory space at once */
 void pool_destroy( entry *p);
 /*  each time alloc a entry size memory */
@@ -52,9 +52,19 @@ entry *palloc (void);
 /* record the address in memory pool*/
 entry *record,*end;
 
-/* Optimal 4*/
-/* threads */
-void Append(void* fp);
+/* thread */
+void *pmmap(void* ptr);
+
+typedef struct __MMAP_ARG {
+    unsigned long int bytes_read;
+    unsigned long int to_read;
+    int fd;
+    char *data;
+} mmap_arg;
+
+mmap_arg *Pmmap;
+pthread_mutex_t mutex1;
+pthread_t thrd[NUMTHRDS];
 
 #endif
 
